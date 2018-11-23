@@ -43,6 +43,67 @@ function gameLoop() {
 }
 
 function playerAction(state, playerIndex) {
+	const tryToGoRight = () => {
+		if (state.board.fields[y][x + 1] == 0) {
+			direction = "RIGHT";
+			return true;
+		} else {
+			return false;
+		}
+	};
+
+	const tryToGoDown = () => {
+		if (state.board.fields[y + 1][x] == 0) {
+			direction = "DOWN";
+			return true;
+		} else {
+			return false
+		}
+	};
+
+	const tryToGoLeft = () => {
+		if (state.board.fields[y][x - 1] == 0) {
+			direction = "LEFT";
+			return true;
+		} else {
+			return false;
+		}
+	};
+
+	const tryToGoUp = () => {
+		if (state.board.fields[y - 1][x] == 0) {
+			direction = "UP";
+			return true;
+		} else {
+			return false;
+		}
+	};
+
+	const goRandom = () => {
+		if (x + 1 < state.board.fields.length) {
+			if (state.board.fields[y][x + 1] == 0) {
+				direction = "RIGHT"
+			}
+		}
+
+		if (y + 1 < state.board.fields.length) {
+			if (state.board.fields[y + 1][x] == 0) {
+				direction = "DOWN";
+			}
+		}
+		if (x - 1 >= 0) {
+			if (state.board.fields[y][x - 1] == 0) {
+				direction = "LEFT"
+			}
+		}
+
+		if (y - 1 >= 0) {
+			if (state.board.fields[y - 1][x] == 0) {
+				direction = "UP"
+			}
+		}
+	};
+
 	// Custom algorithm code goes here...
 	let player = state.players[playerIndex];
 	let x = player.x;
@@ -71,6 +132,7 @@ function playerAction(state, playerIndex) {
 
 	const performAction = () => {
 		const moveInDirection = (res) => {
+
 			if (res === 'LEFT') {
 				let a = tryToGoLeft();
 				if (!a) {
@@ -141,11 +203,18 @@ function playerAction(state, playerIndex) {
 					goUp++;
 				}
 			});
-
-			if (temp[2][0] == 0 || temp[2][1] == 0) {
-				goLeft++;
-			} else if (temp[2][3] == 0 || temp[2][4] == 0) {
-				goRight++;
+			if(temp[2]) {
+				if (temp[2][0] == 0 || temp[2][1] == 0) {
+					goLeft++;
+				} else if (temp[2][3] == 0 || temp[2][4] == 0) {
+					goRight++;
+				}
+			} else {
+				if (temp[1][0] == 0 || temp[1][1] == 0) {
+					goLeft++;
+				} else if (temp[1][3] == 0 || temp[1][4] == 0) {
+					goRight++;
+				}
 			}
 
 			let hor = goLeft > goRight ? 'LEFT' : 'RIGHT';
@@ -262,67 +331,6 @@ function playerAction(state, playerIndex) {
 	};
 
 	performAction();
-
-	function tryToGoRight() {
-		if (state.board.fields[y][x + 1] == 0) {
-			direction = "RIGHT";
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	function tryToGoDown() {
-		if (state.board.fields[y + 1][x] == 0) {
-			direction = "DOWN";
-			return true;
-		} else {
-			return false
-		}
-	}
-
-	function tryToGoLeft() {
-		if (state.board.fields[y][x - 1] == 0) {
-			direction = "LEFT";
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	function tryToGoUp() {
-		if (state.board.fields[y - 1][x] == 0) {
-			direction = "UP";
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	function goRandom() {
-		if (x + 1 < state.board.fields.length) {
-			if (state.board.fields[y][x + 1] == 0) {
-				direction = "RIGHT"
-			}
-		}
-
-		if (y + 1 < state.board.fields.length) {
-			if (state.board.fields[y + 1][x] == 0) {
-				direction = "DOWN";
-			}
-		}
-		if (x - 1 >= 0) {
-			if (state.board.fields[y][x - 1] == 0) {
-				direction = "LEFT"
-			}
-		}
-
-		if (y - 1 >= 0) {
-			if (state.board.fields[y - 1][x] == 0) {
-				direction = "UP"
-			}
-		}
-	}
 
 	// // Change move
 	body.input = direction;
