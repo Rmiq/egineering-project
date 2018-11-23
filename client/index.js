@@ -215,6 +215,37 @@ function playerAction(state, playerIndex) {
 			moveInDirection(res);
 		};
 
+		const countForLeftPartOfTheBoard = () => {
+			const arr = [];
+			array.forEach(xArray => {
+				arr.push([xArray[2], xArray[3], xArray[4]]);
+			});
+
+			let goLeft = 0;
+			let goRight = 0;
+			let goUp = 0;
+			let goDown = 0;
+
+			arr.forEach((yArray, index) => {
+				if (yArray[0] == 0 && index < 2) {
+					goUp++;
+				} else if (yArray[0] == 0 && index > 2) {
+					goDown++;
+				}
+			});
+
+			if (arr[2][1] == 0 || arr[2][2] == 0) {
+				goRight++;
+			}
+
+			let hor = goLeft > goRight ? 'LEFT' : 'RIGHT';
+			let vert = goUp > goDown ? 'UP' : 'DOWN';
+
+			let res = goUp > goRight || goUp > goLeft || goDown > goLeft || goDown > goRight ? vert : hor;
+
+			moveInDirection(res);
+		};
+
 		if (!isUp && !isDown && !isLeft && !isRight) {
 			countForMiddleOfBoard();
 		} else if (isDown && !isLeft && !isRight) {
@@ -224,7 +255,7 @@ function playerAction(state, playerIndex) {
 		} else if (isUp && !isLeft && !isRight) {
 			countForTopOfBoard();
 		} else if (isLeft && !isUp && !isDown) {
-			
+			countForLeftPartOfTheBoard();
 		} else {
 			goRandom();
 		}
