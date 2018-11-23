@@ -16,4 +16,5 @@
 - Open terminal
 - cd client
 - npm install
+- npm install node-fetch
 - node index.js
