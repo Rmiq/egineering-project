@@ -1,0 +1,134 @@
+<html>
+
+<head>
+    <style>
+        body {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .right-panel {
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            position: relative;
+        }
+
+        .players-table {
+            width: 150px;
+        }
+
+        .players-table p {}
+
+        .players-table p span {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            margin-right: 5px;
+        }
+
+        .button {
+            padding: 0.5rem 1rem;
+            border: 1px solid rgb(31, 30, 30);
+            cursor: pointer;
+            margin-bottom: 50px;
+        }
+
+        .button:hover {
+            box-shadow: #ccc 1px 1px 1px 1px;
+        }
+
+        .button.launched {
+            color: #ccc
+        }
+
+        .button.launched:hover {
+            box-shadow: none;
+        }
+
+        .board-placeholder {
+            border: 1px solid black;
+            width: 500px;
+            height: 500px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .board-placeholder div {
+            border-right: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+            width: 20px;
+            height: 20px;
+            box-sizing: border-box;
+        }
+
+        .board-placeholder div.column-25 {
+            border-right: 0
+        }
+
+        .board-placeholder div.row-25 {
+            border-bottom: 0
+        }
+    </style>
+</head>
+
+<body>
+    <div class="board-placeholder"></div>
+    <div class="right-panel">
+        <div class="button"> Start game! </div>
+        <div class="players-table">
+            <h1> Players: </h1>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const gameButton = document.querySelector('.button');
+        const playersTable = document.querySelector('.players-table');
+        const boardPlaceholder = document.querySelector('.board-placeholder');
+
+        const colors = ['fff', '#ccc', '#FF0000', '#FFD700', '#00FF00', '#8A2BE2', '#00BFFF', '#8B4513', '#FF8C00', '#000000'];
+
+
+        gameButton.addEventListener('click', (e) => {
+            socket.emit('gameStart', "Start");
+        });
+
+        socket.on('gameUpdate', (game) => {
+            console.log(game);
+            renderPlayers(game.players);
+            renderBoard(game.board);
+        });
+
+
+        function renderPlayers(players) {
+            playersTable.innerHTML = '';
+            players.forEach((player) => {
+                let playerMarkup = document.createElement('p');
+                playerMarkup.classList.add(player.name);
+                playerMarkup.innerHTML = `<span style="background-color:${colors[player.id]}"></span>${player.name}`
+                playersTable.appendChild(playerMarkup);
+            });
+
+        }
+
+        function renderBoard(board) {
+            let boardnextFieldsMarkup = '';
+
+            for (let i = 0; i < board.size; i++) {
+                for (let j = 0; j < board.size; j++) {
+                    boardnextFieldsMarkup += `<div class="row-${i} column-${j}" style="background: ${colors[board.fields[i][j]]}"></div>`;
+                }
+            }
+            boardPlaceholder.innerHTML = boardnextFieldsMarkup;
+        }
+
+    </script>
+</body>
+
+</html>
