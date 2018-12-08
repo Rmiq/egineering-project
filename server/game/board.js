@@ -11,7 +11,7 @@ class Board {
         for (let i = 1; i <= boardSize; i++) {
             let row = [];
             for (let j = 1; j <= boardSize; j++) {
-                row.push(Math.random() * 10 <= 9.5 ? "0" : "1")
+                row.push(Math.random() * 10 <= 9.8 ? "0" : "1")
             }
             this.fields.push(row);
         }

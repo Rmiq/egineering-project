@@ -33,7 +33,12 @@ class Player {
     }
 
     checkIsTaken(x, y, board) {
-        return board.fields[y][x] == 0 ? false : true;
+        if( x < 0 || x > board.size - 1 || y < 0 || y > board.size ) {
+            return true;
+        } else {
+            return board.fields[y][x] == 0 ? false : true;
+        }
+        
     }
 
     checkIsOnBoard(x, y, board) {
