@@ -53,56 +53,31 @@ function playerAction(state, playerIndex) {
     let board = state.board;
     let x = player.x;
     let y = player.y;
-    let tempX, tempY;
-    let square = 0;
+    let direction;
 
-    // // Change move
-    body.input = makeMove(board, x, y);
+    if (x + 1 < board.fields.length) {
+        if (board.fields[y][x + 1] == 0) {
+            direction = "RIGHT"
+        }
+    }
 
-    // Make move if needed
+    if (y + 1 < board.fields.length) {
+        if (board.fields[y + 1][x] == 0) {
+            direction = "DOWN";
+        }
+    }
+    if (x - 1 >= 0) {
+        if (board.fields[y][x - 1] == 0) {
+            direction = "LEFT"
+        }
+    }
+
+    if (y - 1 >= 0) {
+        if (board.fields[y - 1][x] == 0) {
+            direction = "UP"
+        }
+    }
+
+    body.input = direction;
     game.makeMove(body);
-}
-
-
-function makeMove(board, x, y) {
-
-    let direction = '';
-    let lock = false;
-
-    if (isCanMove(board, x + 1, y) && canGoRight ) {
-        direction = 'RIGHT';
-        lock = true;
-        if (x + 1 == board.size - 1) {
-            canGoRight = false;
-        }
-    }
-
-    if (!lock) {
-        if (isCanMove(board, x, y + 1) && (isCanMove(board, x - 1, y + 2) || isCanMove(board, x - 1, y + 3))) {
-            direction = 'DOWN';
-
-        } else if (isCanMove(board, x, y - 1) && (isCanMove(board, x - 1, y - 2) || isCanMove(board, x - 1, y + 3))) {
-            direction = 'UP';
-
-        } else if (isCanMove(board, x - 1, y)) {
-            direction = 'LEFT';
-        }
-    }
-
-    return direction;
-
-}
-
-
-function isCanMove(board, x, y) {
-    let canMove = true;
-    if (x < 0 || x >= board.size || y < 0 || y >= board.size) {
-        canMove = false;
-    } else {
-        if (board.fields[y][x] != 0) {
-            canMove = false;
-        }
-    }
-
-    return canMove;
 }
